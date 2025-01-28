@@ -3,7 +3,7 @@ import time
 
 
 import sudoku_config as conf
-from funcs import show, is_solved, is_valide, is_complete
+from funcs import show, can_add, is_solved, is_valide, is_complete
 
 
 def first_empty_box(sudoku):
@@ -22,12 +22,10 @@ def solve(sudoku, output=False):
     all_sudokus = []
     i0,j0 = first_empty_box(sudoku)
     for k in range(1,10):
-        # if len(all_sudokus)>=1: continue ## only to get one solution
+        if not can_add(k,i0,j0,sudoku):
+            continue
         new_sudoku = np.copy(sudoku)
         new_sudoku[i0,j0] = k
-        if not is_valide(new_sudoku, output=output): 
-            # print(f'{i0=},{j0=},{k=} \n')
-            continue
         all_sudokus += solve(new_sudoku, output=output)
 
     return all_sudokus
@@ -37,7 +35,7 @@ def solve(sudoku, output=False):
 
 
 
-stest = conf.s2
+stest = conf.sfinal
 t0 = time.time()
 all_sudokus = solve(stest,output=False)
 dt = time.time()-t0
@@ -51,8 +49,5 @@ for s in all_sudokus:
 
 
 
-# show(stest)
-# print(is_valide(stest))
-# print(is_complete(stest))
 
 
